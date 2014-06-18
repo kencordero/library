@@ -6,11 +6,11 @@ import java.util.UUID;
  * Created by kcordero on 6/17/2014.
  */
 public class Platform {
-    private final String mId;
+    private final int mId;
     private final String mName;
 
-    public Platform(String name) {
-        mId = UUID.randomUUID().toString();
+    public Platform(int id, String name) {
+        mId = id;
         mName = name;
     }
 
