@@ -16,6 +16,11 @@ public class GameListActivity extends SingleFragmentActivity {
     }
 
     @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_masterdetail;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         Log.i(TAG, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
