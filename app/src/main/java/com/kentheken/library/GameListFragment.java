@@ -1,9 +1,13 @@
 package com.kentheken.library;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,7 +25,30 @@ import java.util.ArrayList;
 public class GameListFragment extends ListFragment {
     private static final String TAG = "GameListFragment";
     private ArrayList<Game> mGames;
-    
+    private Callbacks mCallbacks;
+
+    public interface Callbacks {
+        void onGameSelected(Game game);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.i(TAG, "onAttach");
+        mCallbacks = (Callbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i(TAG, "onDetach");
+        mCallbacks = null;
+    }
+
+    public void updateUI() {
+        //((GameAdapter)getListAdapter()).notifyDataSetChanged();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
@@ -41,6 +68,28 @@ public class GameListFragment extends ListFragment {
         getActivity().setTitle(R.string.games_title);
         mGames = GameCollection.get(getActivity()).getGames();
         GameAdapter adapter = new GameAdapter(mGames);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        Log.i(TAG, "onCreateOptionsMenu");
+        inflater.inflate(R.menu.fragment_item_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected");
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_item:
+                Game game = new Game();
+                GameCollection.get(getActivity()).addItem(0, "");
+                updateUI();
+                mCallbacks.onGameSelected(game);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private class GameAdapter extends ArrayAdapter<Game> {

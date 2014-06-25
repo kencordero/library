@@ -1,13 +1,16 @@
 package com.kentheken.library;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class GameListActivity extends SingleFragmentActivity {
+import com.kentheken.library.models.Game;
+
+public class GameListActivity extends SingleFragmentActivity implements GameListFragment.Callbacks {
     private static final String TAG = "GameListActivity";
 
     @Override
@@ -30,12 +33,39 @@ public class GameListActivity extends SingleFragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.i(TAG, "onOptionsItemSelected");
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         if (item.getItemId() == R.id.action_settings) {
+            Log.i(TAG, "Settings selected");
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onGameSelected(Game game) {
+        Log.i(TAG, "onGameSelected");
+        if (findViewById(R.id.detailFragmentContainer) == null) {
+            Log.i(TAG, "phone interface");
+            Intent intent = new Intent(this, GamePagerActivity.class);
+            intent.putExtra(GameFragment.EXTRA_GAME_ID, game.getId());
+            startActivity(intent);
+        }
+        else {
+            Log.i(TAG, "tablet interface");
+            FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+
+            Fragment oldDetail = fm.findFragmentById(R.id.detailFragmentContainer);
+            Fragment newDetail = GameFragment.newInstance(game.getId());
+
+            if (oldDetail != null) {
+                ft.remove(oldDetail);
+            }
+
+            ft.add(R.id.detailFragmentContainer, newDetail).commit();
+        }
+
     }
 }

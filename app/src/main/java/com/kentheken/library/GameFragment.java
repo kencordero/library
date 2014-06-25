@@ -12,8 +12,9 @@ import android.view.ViewGroup;
  */
 public class GameFragment extends Fragment {
     private static final String TAG = "GameFragment";
+    public static final String EXTRA_GAME_ID = "com.kentheken.library.game_id";
 
-    public static GameFragment newInstance() {
+    public static GameFragment newInstance(int gameId) {
         Log.i(TAG, "newInstance");
         return new GameFragment();
     }
