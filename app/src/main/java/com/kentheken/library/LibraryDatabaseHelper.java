@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class SurveyDatabaseHelper extends SQLiteOpenHelper {
+public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SurveyDatabaseHelper";
     private static final int DB_VERSION = 1;
 
@@ -40,7 +40,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
      * @param context activity or application context
      * @param dbName filename for database
      */
-    public SurveyDatabaseHelper(Context context, String dbName) {        
+    public LibraryDatabaseHelper(Context context, String dbName) {
         super(context, dbName, null, DB_VERSION);
         Log.i(TAG, "init");
         mDbName = dbName;
@@ -155,10 +155,9 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
     // public helper methods to access and get content from the database.
     public GameCollection getCollection() {
         GameCollection collection = GameCollection.get(mContext);
-        if (collection.getItemCount() > 0) // survey already populated
+        if (collection.getItemCount() > 0) // collection already populated
             return collection;
-        Cursor cursor = mDatabase.rawQuery("SELECT ?, ? FROM ? ORDER BY RANDOM() LIMIT 5",
-                new String[] {ID_COLUMN_NAME, TITLE_COLUMN_NAME, GAME_TABLE_NAME});
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM games", null);
         if (cursor != null) {
             try {
                 cursor.moveToFirst();
@@ -170,7 +169,7 @@ public class SurveyDatabaseHelper extends SQLiteOpenHelper {
             } finally {
                 cursor.close();
             }
-        }        
+        }
         return collection;
     }
 
