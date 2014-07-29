@@ -164,7 +164,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     int gameId = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
                     String gameTitle = cursor.getString(cursor.getColumnIndex(TITLE_COLUMN_NAME));
-                    collection.addItem(gameId, gameTitle);
+                    collection.addGame(gameId, gameTitle);
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();

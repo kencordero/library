@@ -12,6 +12,7 @@ import com.kentheken.library.models.Game;
 import com.kentheken.library.models.GameCollection;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by kcordero on 6/25/2014.
@@ -33,8 +34,9 @@ public class GamePagerActivity extends FragmentActivity {
         FragmentManager fm = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(fm) {
             public Fragment getItem(int position) {
+                Log.i(TAG, "getItem, position: " + position);
                 Game game = mGames.get(position);
-                return GameFragment.newInstance(game.getId());
+                return GameFragment.newInstance(game.getUUID());
             }
 
             public int getCount() {
@@ -42,5 +44,12 @@ public class GamePagerActivity extends FragmentActivity {
             }
         });
 
+        UUID uuid = (UUID)getIntent().getSerializableExtra(GameFragment.EXTRA_GAME_ID);
+        for (int i = 0; i < mGames.size(); ++i) {
+            if (mGames.get(i).getUUID().equals(uuid)) {
+                mViewPager.setCurrentItem(i);
+                break;
+            }
+        }
     }
 }

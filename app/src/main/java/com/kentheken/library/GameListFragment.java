@@ -46,14 +46,14 @@ public class GameListFragment extends ListFragment {
     }
 
     public void updateUI() {
-        //((GameAdapter)getListAdapter()).notifyDataSetChanged();
+        ((GameAdapter)getListAdapter()).notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
         View view = super.onCreateView(inflater, parent, savedInstanceState);
-        ListView listView = (ListView)view.findViewById(android.R.id.list);
+        //ListView listView = (ListView)view.findViewById(android.R.id.list);
         return view;
     }
 
@@ -68,6 +68,7 @@ public class GameListFragment extends ListFragment {
         getActivity().setTitle(R.string.games_title);
         mGames = GameCollection.get(getActivity()).getGames();
         GameAdapter adapter = new GameAdapter(mGames);
+        setListAdapter(adapter);
     }
 
     @Override
@@ -83,13 +84,21 @@ public class GameListFragment extends ListFragment {
         switch (item.getItemId()) {
             case R.id.menu_item_new_item:
                 Game game = new Game();
-                GameCollection.get(getActivity()).addItem(0, "");
+                GameCollection.get(getActivity()).addGame(game);
                 updateUI();
                 mCallbacks.onGameSelected(game);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onListItemClick(ListView lv, View v, int idx, long id)
+    {
+        Game game = ((GameAdapter)getListAdapter()).getItem(idx);
+        mCallbacks.onGameSelected(game);
+
     }
 
     private class GameAdapter extends ArrayAdapter<Game> {
