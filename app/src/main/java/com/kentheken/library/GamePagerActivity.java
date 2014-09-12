@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * Created by kcordero on 6/25/2014.
  */
-public class GamePagerActivity extends FragmentActivity {
+public class GamePagerActivity extends FragmentActivity implements GameFragment.Callbacks {
     private static final String TAG = "GamePagerActivity";
     private ViewPager mViewPager;
     private ArrayList<Game> mGames;
@@ -36,7 +36,7 @@ public class GamePagerActivity extends FragmentActivity {
             public Fragment getItem(int position) {
                 Log.i(TAG, "getItem, position: " + position);
                 Game game = mGames.get(position);
-                return GameFragment.newInstance(game.getUUID());
+                return GameFragment.newInstance(game.getId());
             }
 
             public int getCount() {
@@ -46,10 +46,16 @@ public class GamePagerActivity extends FragmentActivity {
 
         UUID uuid = (UUID)getIntent().getSerializableExtra(GameFragment.EXTRA_GAME_ID);
         for (int i = 0; i < mGames.size(); ++i) {
-            if (mGames.get(i).getUUID().equals(uuid)) {
+            if (mGames.get(i).getId().equals(uuid)) {
                 mViewPager.setCurrentItem(i);
                 break;
             }
         }
+    }
+
+    @Override
+    public void onGameSaved(Game game) {
+        Log.i(TAG, "onGameSaved");
+        GameCollection.get(this).saveGame(game);
     }
 }

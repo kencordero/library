@@ -1,6 +1,7 @@
 package com.kentheken.library;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,8 +25,25 @@ public class GameFragment extends Fragment {
     private static final String TAG = "GameFragment";
     public static final String EXTRA_GAME_ID = "com.kentheken.library.game_id";
 
+    private Callbacks mCallbacks;
     private EditText mTitleField;
     private Game mGame;
+
+    public interface Callbacks {
+        void onGameSaved(Game game);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     public static GameFragment newInstance(UUID gameIdx) {
         Log.i(TAG, "newInstance");
@@ -83,6 +101,7 @@ public class GameFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.i(TAG, "onPause");
-        GameCollection.get(getActivity()).saveGames();
+        mCallbacks.onGameSaved(mGame);
+        GameCollection.get(getActivity()).saveGame(mGame);
     }
 }

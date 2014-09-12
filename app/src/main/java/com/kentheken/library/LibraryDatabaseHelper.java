@@ -16,16 +16,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "SurveyDatabaseHelper";
     private static final int DB_VERSION = 1;
 
-    private static final String ID_COLUMN_NAME = "_id";
+    private static final String ID_COLUMN_NAME = "uuid";
     private static final String TITLE_COLUMN_NAME = "title";
     private static final String GAME_TABLE_NAME = "games";
 
-    private SQLiteDatabase mDatabase;
+    private static SQLiteDatabase mDatabase;
     private final Context mContext;
     private final String mDbName;
     private String mPath;
@@ -54,6 +56,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public void createDatabase() {
         Log.i(TAG, "createDatabase");
         boolean dbExists = checkDatabase();
+        //boolean dbExists = false; // force update while debugging
 
         if (!dbExists) {
             // By calling this method, an empty database will be created into the default system path
@@ -152,19 +155,18 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         Log.i(TAG, "onUpgrade");
     }
 
+
     // public helper methods to access and get content from the database.
-    public GameCollection getCollection() {
-        GameCollection collection = GameCollection.get(mContext);
-        if (collection.getItemCount() > 0) // collection already populated
-            return collection;
+    public ArrayList<Game> loadGames() {
+        ArrayList<Game> collection = new ArrayList<Game>();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM games", null);
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
                 do {
-                    int gameId = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
+                    UUID gameId = UUID.fromString(cursor.getString(cursor.getColumnIndex(ID_COLUMN_NAME)));
                     String gameTitle = cursor.getString(cursor.getColumnIndex(TITLE_COLUMN_NAME));
-                    collection.addGame(gameId, gameTitle);
+                    collection.add(new Game(gameId, gameTitle));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -173,12 +175,33 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         return collection;
     }
 
-    public void saveGame() {
+    public boolean saveGame(Game game) {
+        if (game.getTitle().equals("")) return false; // won't save blank game or overwrite game with no title
         ContentValues values = new ContentValues();
-        for (Game game : GameCollection.get(mContext).getGames()) {
-            values.put(ID_COLUMN_NAME, game.getId());
+
+        if (!IdAlreadyExists(game)) {
+            values.put(ID_COLUMN_NAME, game.getId().toString());
             values.put(TITLE_COLUMN_NAME, game.getTitle());
             getWritableDatabase().insert(GAME_TABLE_NAME, null, values);
+            return true;
         }
+        return false;
+    }
+
+    public boolean IdAlreadyExists(Game game) {
+        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM games WHERE uuid = ?",
+                new String[] {game.getId().toString()});
+        int count = 0;
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();
+                do {
+                    count = cursor.getInt(0);
+                } while (cursor.moveToNext());
+            } finally {
+                cursor.close();
+            }
+        }
+        return count == 1;
     }
 }

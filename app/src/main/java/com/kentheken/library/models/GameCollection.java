@@ -2,6 +2,8 @@ package com.kentheken.library.models;
 
 import android.content.Context;
 
+import com.kentheken.library.LibraryDatabaseHelper;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,6 +14,8 @@ public class GameCollection {
     private final Context mAppContext;
     private ArrayList<Game> mGames;
     private static GameCollection sCollection;
+    private static final String DB_NAME = "library.db3";
+    private LibraryDatabaseHelper mHelper;
 
     public static GameCollection get(Context c) {
         if (sCollection == null) {
@@ -23,6 +27,8 @@ public class GameCollection {
     private GameCollection(Context appContext) {
         mAppContext = appContext;
         mGames = new ArrayList<Game>();
+        mHelper = new LibraryDatabaseHelper(mAppContext, DB_NAME);
+        mGames = mHelper.loadGames();
     }
 
     public int getItemCount() {
@@ -33,13 +39,13 @@ public class GameCollection {
         return mGames;
     }
 
-    public void saveGames() {
-
+    public void saveGame(Game game) {
+        mHelper.saveGame(game);
     }
 
     public Game getGame(UUID gameId) {
         for (Game game: mGames) {
-            if (game.getUUID() == gameId)
+            if (game.getId() == gameId)
                 return game;
         }
         return null;
@@ -50,11 +56,10 @@ public class GameCollection {
     }
 
     public void addGame(Game game) {
-        game.setId(getItemCount());
         mGames.add(game);
     }
 
-    public void addGame(int gameId, String gameTitle) {
-
+    public void addGame(UUID gameId, String gameTitle) {
+        mGames.add(new Game(gameId, gameTitle));
     }
 }
