@@ -7,5 +7,6 @@
     <string name="games_title">Games</string>
     <string name="new_game">New game</string>
     <string name="enter_game_title">Enter game title</string>
+    <string name="game_title_label">TITLE</string>
 
 </resources>

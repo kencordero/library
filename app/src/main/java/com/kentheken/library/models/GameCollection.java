@@ -58,8 +58,4 @@ public class GameCollection {
     public void addGame(Game game) {
         mGames.add(game);
     }
-
-    public void addGame(UUID gameId, String gameTitle) {
-        mGames.add(new Game(gameId, gameTitle));
-    }
 }

@@ -1,5 +1,6 @@
 package com.kentheken.library;
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Build;
@@ -25,25 +26,8 @@ public class GameFragment extends Fragment {
     private static final String TAG = "GameFragment";
     public static final String EXTRA_GAME_ID = "com.kentheken.library.game_id";
 
-    private Callbacks mCallbacks;
     private EditText mTitleField;
     private Game mGame;
-
-    public interface Callbacks {
-        void onGameSaved(Game game);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        mCallbacks = (Callbacks)activity;
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mCallbacks = null;
-    }
 
     public static GameFragment newInstance(UUID gameIdx) {
         Log.i(TAG, "newInstance");
@@ -76,9 +60,13 @@ public class GameFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mGame.setTitle(s.toString());
-                // TODO callback
-                getActivity().setTitle(mGame.getTitle());
+                if (s.length() > 0) {
+                    mGame.setTitle(s.toString());
+                    if (mGame.getFlag() == Game.FLAG.UNMODIFIED) {
+                        mGame.setFlag(Game.FLAG.MODIFIED);
+                    }
+                    getActivity().setTitle(mGame.getTitle());
+                }
             }
 
             public void afterTextChanged(Editable s) { }
@@ -86,11 +74,12 @@ public class GameFragment extends Fragment {
         return view;
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             ActionBar actionBar = getActivity().getActionBar();
             actionBar.setIcon(android.R.drawable.ic_menu_save);
             actionBar.setTitle(R.string.abc_action_mode_done);
@@ -101,7 +90,12 @@ public class GameFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.i(TAG, "onPause");
-        mCallbacks.onGameSaved(mGame);
-        GameCollection.get(getActivity()).saveGame(mGame);
+        if (mGame.getFlag() != Game.FLAG.UNMODIFIED) {
+            Log.i(TAG, "save changes");
+            GameCollection.get(getActivity()).saveGame(mGame);
+        }
+        else {
+            Log.i(TAG, "unmodified; no need to save " + mGame.getTitle());
+        }
     }
 }

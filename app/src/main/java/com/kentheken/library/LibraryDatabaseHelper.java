@@ -19,8 +19,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import static com.kentheken.library.models.Game.FLAG.*;
+
 public class LibraryDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = "SurveyDatabaseHelper";
+    private static final String TAG = "LibraryDatabaseHelper";
     private static final int DB_VERSION = 1;
 
     private static final String ID_COLUMN_NAME = "uuid";
@@ -166,7 +168,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
                 do {
                     UUID gameId = UUID.fromString(cursor.getString(cursor.getColumnIndex(ID_COLUMN_NAME)));
                     String gameTitle = cursor.getString(cursor.getColumnIndex(TITLE_COLUMN_NAME));
-                    collection.add(new Game(gameId, gameTitle));
+                    collection.add(new Game(gameId, gameTitle, UNMODIFIED));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -175,33 +177,23 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         return collection;
     }
 
-    public boolean saveGame(Game game) {
-        if (game.getTitle().equals("")) return false; // won't save blank game or overwrite game with no title
+
+    public void saveGame(Game game) {
+        if (game.getTitle().length() == 0) return; // won't save blank game or overwrite game with no title
         ContentValues values = new ContentValues();
 
-        if (!IdAlreadyExists(game)) {
-            values.put(ID_COLUMN_NAME, game.getId().toString());
-            values.put(TITLE_COLUMN_NAME, game.getTitle());
-            getWritableDatabase().insert(GAME_TABLE_NAME, null, values);
-            return true;
+        values.put(ID_COLUMN_NAME, game.getId().toString());
+        values.put(TITLE_COLUMN_NAME, game.getTitle());
+        switch (game.getFlag()) {
+            case NEW:
+                Log.i(TAG, "saveGame: insert " + game.getTitle());
+                getWritableDatabase().insert(GAME_TABLE_NAME, null, values);
+                break;
+            case MODIFIED:
+                Log.i(TAG, "saveGame: update " + game.getTitle());
+                getWritableDatabase().update(GAME_TABLE_NAME, values, "uuid=?", new String[]{game.getId().toString()});
+                break;
         }
-        return false;
-    }
-
-    public boolean IdAlreadyExists(Game game) {
-        Cursor cursor = mDatabase.rawQuery("SELECT COUNT(*) FROM games WHERE uuid = ?",
-                new String[] {game.getId().toString()});
-        int count = 0;
-        if (cursor != null) {
-            try {
-                cursor.moveToFirst();
-                do {
-                    count = cursor.getInt(0);
-                } while (cursor.moveToNext());
-            } finally {
-                cursor.close();
-            }
-        }
-        return count == 1;
+        game.setFlag(UNMODIFIED);
     }
 }

@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * Created by kcordero on 6/25/2014.
  */
-public class GamePagerActivity extends FragmentActivity implements GameFragment.Callbacks {
+public class GamePagerActivity extends FragmentActivity {
     private static final String TAG = "GamePagerActivity";
     private ViewPager mViewPager;
     private ArrayList<Game> mGames;
@@ -51,11 +51,5 @@ public class GamePagerActivity extends FragmentActivity implements GameFragment.
                 break;
             }
         }
-    }
-
-    @Override
-    public void onGameSaved(Game game) {
-        Log.i(TAG, "onGameSaved");
-        GameCollection.get(this).saveGame(game);
     }
 }
