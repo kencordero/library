@@ -10,7 +10,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.kentheken.library.models.Game;
-import com.kentheken.library.models.GameCollection;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,7 +49,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         mDbName = dbName;
         mContext = context;
         openDatabase();
-    }   
+    }
     
     /**
      * Creates a empty database on the system and rewrites it with your own database.
@@ -161,7 +160,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     // public helper methods to access and get content from the database.
     public ArrayList<Game> loadGames() {
         ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM games", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM games ORDER BY title", null);
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -176,7 +175,6 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         }
         return collection;
     }
-
 
     public void saveGame(Game game) {
         if (game.getTitle().length() == 0) return; // won't save blank game or overwrite game with no title

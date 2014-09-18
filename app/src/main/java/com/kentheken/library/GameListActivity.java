@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 import com.kentheken.library.models.Game;
 
-public class GameListActivity extends SingleFragmentActivity implements GameListFragment.Callbacks {
+public class GameListActivity extends SingleFragmentActivity implements GameListFragment.Callbacks, GameFragment.Callbacks {
     private static final String TAG = "GameListActivity";
 
     @Override
@@ -67,6 +67,12 @@ public class GameListActivity extends SingleFragmentActivity implements GameList
 
             ft.add(R.id.detailFragmentContainer, newDetail).commit();
         }
+    }
 
+    @Override
+    public void onGameUpdated(Game game) {
+        FragmentManager fm = getSupportFragmentManager();
+        GameListFragment listFragment = (GameListFragment)fm.findFragmentById(R.id.fragmentContainer);
+        listFragment.updateUI();
     }
 }

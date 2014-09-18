@@ -25,9 +25,26 @@ import java.util.UUID;
 public class GameFragment extends Fragment {
     private static final String TAG = "GameFragment";
     public static final String EXTRA_GAME_ID = "com.kentheken.library.game_id";
+    private Callbacks mCallbacks;
 
     private EditText mTitleField;
     private Game mGame;
+
+    public interface Callbacks {
+        void onGameUpdated(Game game);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mCallbacks = (Callbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     public static GameFragment newInstance(UUID gameIdx) {
         Log.i(TAG, "newInstance");
@@ -65,6 +82,7 @@ public class GameFragment extends Fragment {
                     if (mGame.getFlag() == Game.FLAG.UNMODIFIED) {
                         mGame.setFlag(Game.FLAG.MODIFIED);
                     }
+                    mCallbacks.onGameUpdated(mGame);
                     getActivity().setTitle(mGame.getTitle());
                 }
             }
