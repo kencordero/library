@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.kentheken.library.models.Game;
+import com.kentheken.library.models.Platform;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,10 +25,13 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = "LibraryDatabaseHelper";
     private static final int DB_VERSION = 1;
 
-    private static final String ID_COLUMN_NAME = "uuid";
+    private static final String ID_COLUMN_NAME = "_id";
+    private static final String UUID_COLUMN_NAME = "uuid";
     private static final String TITLE_COLUMN_NAME = "title";
+    private static final String NAME_COLUMN_NAME = "name";
     private static final String GAME_TABLE_NAME = "games";
 
+    private static LibraryDatabaseHelper sHelper;
     private static SQLiteDatabase mDatabase;
     private final Context mContext;
     private final String mDbName;
@@ -43,12 +47,19 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
      * @param context activity or application context
      * @param dbName filename for database
      */
-    public LibraryDatabaseHelper(Context context, String dbName) {
+    private LibraryDatabaseHelper(Context context, String dbName) {
         super(context, dbName, null, DB_VERSION);
         Log.i(TAG, "init");
         mDbName = dbName;
         mContext = context;
         openDatabase();
+    }
+
+    public static LibraryDatabaseHelper get(Context context, String dbName) {
+        if (sHelper == null) {
+            sHelper = new LibraryDatabaseHelper(context, dbName);
+        }
+        return sHelper;
     }
     
     /**
@@ -160,14 +171,15 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     // public helper methods to access and get content from the database.
     public ArrayList<Game> loadGames() {
         ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM games ORDER BY title", null);
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM games ORDER BY title COLLATE NOCASE", null);
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
                 do {
-                    UUID gameId = UUID.fromString(cursor.getString(cursor.getColumnIndex(ID_COLUMN_NAME)));
+                    UUID gameUuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(UUID_COLUMN_NAME)));
                     String gameTitle = cursor.getString(cursor.getColumnIndex(TITLE_COLUMN_NAME));
-                    collection.add(new Game(gameId, gameTitle, UNMODIFIED));
+                    int gameId = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
+                    collection.add(new Game(gameUuid, gameTitle, UNMODIFIED, gameId));
                 } while (cursor.moveToNext());
             } finally {
                 cursor.close();
@@ -180,7 +192,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
         if (game.getTitle().length() == 0) return; // won't save blank game or overwrite game with no title
         ContentValues values = new ContentValues();
 
-        values.put(ID_COLUMN_NAME, game.getId().toString());
+        values.put(UUID_COLUMN_NAME, game.getUuid().toString());
         values.put(TITLE_COLUMN_NAME, game.getTitle());
         switch (game.getFlag()) {
             case NEW:
@@ -189,9 +201,33 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
                 break;
             case MODIFIED:
                 Log.i(TAG, "saveGame: update " + game.getTitle());
-                getWritableDatabase().update(GAME_TABLE_NAME, values, "uuid=?", new String[]{game.getId().toString()});
+                getWritableDatabase().update(GAME_TABLE_NAME, values, "uuid=?", new String[]{game.getUuid().toString()});
                 break;
         }
         game.setFlag(UNMODIFIED);
+    }
+
+    public ArrayList<Platform> loadPlatforms() {
+        ArrayList<Platform> collection = new ArrayList<Platform>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM platforms ORDER BY name COLLATE NOCASE", null);
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                do {
+                    int platformId = cursor.getInt(cursor.getColumnIndex(ID_COLUMN_NAME));
+                    String platformName = cursor.getString(cursor.getColumnIndex(NAME_COLUMN_NAME));
+                    collection.add(new Platform(platformId, platformName));
+                } while (cursor.moveToNext());
+            } finally {
+                cursor.close();
+            }
+        }
+        return collection;
+    }
+
+    public ArrayList<Integer> getGamePlatformIDs(Game game) {
+        ArrayList<Integer> IDs = new ArrayList<Integer>();
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM game_platforms WHERE game_id = ?", new String[] {game.getUuid().toString()});
+        return IDs;
     }
 }

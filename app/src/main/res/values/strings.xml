@@ -2,12 +2,15 @@
 <resources>
 
     <string name="app_name">Library</string>
-    <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
     <string name="games_title">Games</string>
     <string name="new_game">New game</string>
     <string name="game_title_hint">Enter game title</string>
-    <string name="game_title_label">TITLE</string>
+    <string name="game_title_label">Title</string>
     <string name="menu_item_save">Save and add another</string>
+    <string name="platform_title_label">Platform</string>
+    <string name="button_platform_select">Select Platforms</string>
+    <string name="dialog_platform_select">Platforms</string>
+    <string name="empty_platform_list">None</string>
 
 </resources>

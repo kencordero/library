@@ -50,7 +50,7 @@ public class GameListActivity extends SingleFragmentActivity implements GameList
         if (findViewById(R.id.detailFragmentContainer) == null) {
             Log.i(TAG, "phone interface");
             Intent intent = new Intent(this, GamePagerActivity.class);
-            intent.putExtra(GameFragment.EXTRA_GAME_ID, game.getId());
+            intent.putExtra(GameFragment.EXTRA_GAME_ID, game.getUuid());
             startActivity(intent);
         }
         else {
@@ -59,7 +59,7 @@ public class GameListActivity extends SingleFragmentActivity implements GameList
             FragmentTransaction ft = fm.beginTransaction();
 
             Fragment oldDetail = fm.findFragmentById(R.id.detailFragmentContainer);
-            Fragment newDetail = GameFragment.newInstance(game.getId());
+            Fragment newDetail = GameFragment.newInstance(game.getUuid());
 
             if (oldDetail != null) {
                 ft.remove(oldDetail);
@@ -71,8 +71,8 @@ public class GameListActivity extends SingleFragmentActivity implements GameList
 
     @Override
     public void onGameUpdated(Game game) {
-        FragmentManager fm = getSupportFragmentManager();
-        GameListFragment listFragment = (GameListFragment)fm.findFragmentById(R.id.fragmentContainer);
-        listFragment.updateUI();
+        ((GameListFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.fragmentContainer))
+                .updateUI();
     }
 }

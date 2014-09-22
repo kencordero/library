@@ -7,4 +7,6 @@
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="editText_layout_margin">16dp</dimen>
+    <dimen name="button_layout_margin">32dp</dimen>
+    <dimen name="text_layout_margin">40dp</dimen>
 </resources>

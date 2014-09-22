@@ -15,5 +15,20 @@
         android:layout_marginEnd="@dimen/editText_layout_margin"
         android:inputType="textCapSentences"
         android:hint="@string/game_title_hint"/>
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/platform_title_label"
+        style="?android:listSeparatorTextViewStyle"/>
+    <Button android:id="@+id/fragment_game_platform_select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/button_layout_margin"
+        android:layout_marginEnd="@dimen/button_layout_margin"
+        android:text="@string/button_platform_select"/>
+    <TextView android:id="@+id/fragment_game_platform_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/text_layout_margin"
+        android:layout_marginEnd="@dimen/text_layout_margin"/>
 
 </LinearLayout>

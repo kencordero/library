@@ -1,7 +1,5 @@
 package com.kentheken.library.models;
 
-import java.util.UUID;
-
 /**
  * Created by kcordero on 6/17/2014.
  */
@@ -16,5 +14,9 @@ public class Platform {
 
     public String getName() {
         return mName;
+    }
+
+    public int getId() {
+        return mId;
     }
 }

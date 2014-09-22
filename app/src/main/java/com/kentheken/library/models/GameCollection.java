@@ -27,11 +27,24 @@ public class GameCollection {
     private GameCollection(Context appContext) {
         mAppContext = appContext;
         mGames = new ArrayList<Game>();
-        mHelper = new LibraryDatabaseHelper(mAppContext, DB_NAME);
+        mHelper = LibraryDatabaseHelper.get(mAppContext, DB_NAME);
         mGames = mHelper.loadGames();
     }
 
-    public int getItemCount() {
+    public boolean[] getPlatformSelections(Game game) {
+        if (game.getPlatformSelections() == null) {
+            ArrayList<Platform> platforms = PlatformCollection.get(mAppContext).getPlatforms();
+            boolean[] selections = new boolean[platforms.size()];
+            ArrayList<Integer> gamePlatformIds = mHelper.getGamePlatformIDs(game);
+            for (Platform platform : platforms) {
+
+            }
+            game.setPlatformSelections(selections);
+        }
+        return game.getPlatformSelections();
+    }
+
+    public int getCount() {
         return mGames.size();
     }
 
@@ -45,7 +58,7 @@ public class GameCollection {
 
     public Game getGame(UUID gameId) {
         for (Game game: mGames) {
-            if (game.getId() == gameId)
+            if (game.getUuid() == gameId)
                 return game;
         }
         return null;
