@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/editText_layout_margin"
         android:layout_marginEnd="@dimen/editText_layout_margin"
-        android:inputType="textCapSentences"
+        android:inputType="textCapWords|textAutoCorrect"
         android:hint="@string/game_title_hint"/>
     <TextView android:layout_width="match_parent"
         android:layout_height="wrap_content"
