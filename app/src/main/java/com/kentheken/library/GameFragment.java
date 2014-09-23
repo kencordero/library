@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -160,11 +161,9 @@ public class GameFragment extends Fragment {
     }
 
     private void updatePlatformList() {
-        if (mGame.getPlatformSelections() == null || mGame.getPlatformSelections().length == 0) {
-            mPlatformListText.setText(R.string.empty_platform_list);
-        } else {
+        StringBuilder builder = new StringBuilder();
+        if (mGame.getPlatformSelections() != null) {
             int idx = 0;
-            StringBuilder builder = new StringBuilder();
             for (Platform platform : PlatformCollection.get(getActivity()).getPlatforms()) {
                 if (mGame.getPlatformSelections()[idx++]) {
                     if (builder.length() != 0) {
@@ -173,7 +172,14 @@ public class GameFragment extends Fragment {
                     builder.append(platform.getName());
                 }
             }
+        }
+        if (builder.length() != 0) {
+            mPlatformListText.setTypeface(null, Typeface.NORMAL);
             mPlatformListText.setText(builder.toString());
+        }
+        else {
+            mPlatformListText.setTypeface(null, Typeface.ITALIC);
+            mPlatformListText.setText(R.string.empty_platform_list);
         }
     }
 }
