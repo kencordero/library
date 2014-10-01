@@ -16,36 +16,24 @@ public class PlatformSelectDialogFragment extends DialogFragment {
     private static final String TAG = "PlatformSelectDialogFragment";
     private static final String EXTRA_LIST = "platforms";
     public static final String EXTRA_SELECTION = "selection";
-    private ArrayList<Integer> mSelectedItems;
+    private static boolean[] mSelections;
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Log.i(TAG, "onCreateDialog");
         String[] platforms = getArguments().getStringArray(EXTRA_LIST);
-        boolean[] selections = getArguments().getBooleanArray(EXTRA_SELECTION);
-        mSelectedItems = new ArrayList<Integer>();  // Where we track the selected items
+        mSelections = getArguments().getBooleanArray(EXTRA_SELECTION);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Set the dialog title
         builder.setTitle(R.string.dialog_platform_select)
             // Specify the list array, the items to be selected by default (null for none),
             // and the listener through which to receive callbacks when items are selected
-            .setMultiChoiceItems(platforms, selections,
+            .setMultiChoiceItems(platforms, mSelections,
                 new DialogInterface.OnMultiChoiceClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                        if (isChecked) {
-                            // If the user checked the item, add it to the selected items
-                            mSelectedItems.add(which);
-                            for (Integer i : mSelectedItems) {
-                                Log.i(TAG, "Selected: " + i);
-                            }
-                        } else if (mSelectedItems.contains(which)) {
-                            // Else, if the item is already in the array, remove it
-                            mSelectedItems.remove(Integer.valueOf(which));
-                            for (Integer i : mSelectedItems) {
-                                Log.i(TAG, "Selected: " + i);
-                            }
-                        }
+                    public void onClick(DialogInterface dialog, int idx, boolean isChecked) {
+                        mSelections[idx] = isChecked;
+                        Log.i(TAG, "#" + idx + " AFTER: " + mSelections[idx]);
                     }
                 })
                 // Set the action buttons
@@ -55,13 +43,15 @@ public class PlatformSelectDialogFragment extends DialogFragment {
                         // User clicked OK, so save the mSelectedItems results somewhere
                         // or return them to the component that opened the dialog
                         Log.i(TAG, "clickPositiveButton");
-                        getArguments().putIntegerArrayList(EXTRA_SELECTION, mSelectedItems);
+                        getArguments().putBooleanArray(EXTRA_SELECTION, mSelections);
                         sendResult(Activity.RESULT_OK);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        Log.i(TAG, "clickNegativeButton");
+                        sendResult(Activity.RESULT_CANCELED);
                     }
                 });
         return builder.create();
@@ -81,7 +71,7 @@ public class PlatformSelectDialogFragment extends DialogFragment {
             return;
 
         Intent i = new Intent();
-        i.putExtra(EXTRA_SELECTION, mSelectedItems);
+        i.putExtra(EXTRA_SELECTION, mSelections);
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, i);
     }
 }

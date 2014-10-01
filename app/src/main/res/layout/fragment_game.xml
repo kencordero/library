@@ -3,7 +3,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginStart="@dimen/activity_horizontal_margin"
+    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_vertical_margin">
     <TextView android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/game_title_label"
@@ -11,8 +14,6 @@
     <EditText android:id="@+id/fragment_game_titleField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/editText_layout_margin"
-        android:layout_marginEnd="@dimen/editText_layout_margin"
         android:inputType="textCapWords|textAutoCorrect"
         android:hint="@string/game_title_hint"/>
     <TextView android:layout_width="match_parent"
@@ -30,5 +31,4 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/text_layout_margin"
         android:layout_marginEnd="@dimen/text_layout_margin"/>
-
 </LinearLayout>

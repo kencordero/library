@@ -72,6 +72,7 @@ public class GameFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
+        setRetainInstance(true);
 
         UUID gameIdx = (UUID) getArguments().getSerializable(EXTRA_GAME_ID);
         Log.i(TAG, "Game ID: " + gameIdx);
@@ -110,7 +111,9 @@ public class GameFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fm = getActivity()
                         .getSupportFragmentManager();
-                PlatformSelectDialogFragment dialog = PlatformSelectDialogFragment.newInstance(PlatformCollection.get(getActivity()).getPlatformList(), mGame.getPlatformSelections());
+                PlatformSelectDialogFragment dialog = PlatformSelectDialogFragment.newInstance(
+                        PlatformCollection.get(getActivity()).getPlatformList(),
+                        GameCollection.get(getActivity()).getPlatformSelections(mGame));
                 dialog.setTargetFragment(GameFragment.this, REQUEST_PLATFORM_LIST);
                 dialog.show(fm, DIALOG_PLATFORM);
             }
@@ -127,11 +130,6 @@ public class GameFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            ActionBar actionBar = getActivity().getActionBar();
-            actionBar.setIcon(android.R.drawable.ic_menu_save);
-            actionBar.setTitle(R.string.abc_action_mode_done);
-        }
     }
 
     @Override
@@ -148,21 +146,19 @@ public class GameFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult");
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == REQUEST_PLATFORM_LIST) {
-            ArrayList<Integer> selections = data.getIntegerArrayListExtra(PlatformSelectDialogFragment.EXTRA_SELECTION);
-            boolean[] hasPlatform = new boolean[PlatformCollection.get(getActivity()).getCount()];
-            for (Integer i : selections) {
-                hasPlatform[i] = true;
-            }
-            mGame.setPlatformSelections(hasPlatform);
+            boolean[] selections = data.getBooleanArrayExtra(PlatformSelectDialogFragment.EXTRA_SELECTION);
+            mGame.setPlatformSelections(selections);
+            if (mGame.getFlag() == Game.FLAG.UNMODIFIED) mGame.setFlag(Game.FLAG.MODIFIED);
             updatePlatformList();
         }
     }
 
     private void updatePlatformList() {
         StringBuilder builder = new StringBuilder();
-        if (mGame.getPlatformSelections() != null) {
+        if (GameCollection.get(getActivity()).getPlatformSelections(mGame) != null) {
             int idx = 0;
             for (Platform platform : PlatformCollection.get(getActivity()).getPlatforms()) {
                 if (mGame.getPlatformSelections()[idx++]) {

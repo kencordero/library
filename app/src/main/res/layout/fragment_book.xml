@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/activity_horizontal_margin">
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/book_title_label"
+        style="?android:listSeparatorTextViewStyle"/>
+    <EditText android:id="@+id/book_titleField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textCapWords|textAutoCorrect"
+        android:hint="@string/book_title_hint"/>
+    <TextView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/author_label"
+        style="?android:listSeparatorTextViewStyle"/>
+    <EditText android:id="@+id/book_author_first_name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/book_first_name_hint"/>
+    <EditText android:id="@+id/author_last_name_field"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/book_last_name_hint"/>
+
+    <RatingBar android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/book_genre_label"
+            android:gravity="end"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+        <Spinner android:id="@+id/book_genre_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/book_format_label"
+            android:gravity="end"
+            android:layout_gravity="center"
+            android:layout_weight="1"/>
+        <Spinner android:id="@+id/book_format_field"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+    </LinearLayout>
+</LinearLayout>

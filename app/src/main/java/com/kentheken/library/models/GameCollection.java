@@ -36,8 +36,9 @@ public class GameCollection {
             ArrayList<Platform> platforms = PlatformCollection.get(mAppContext).getPlatforms();
             boolean[] selections = new boolean[platforms.size()];
             ArrayList<Integer> gamePlatformIds = mHelper.getGamePlatformIDs(game);
+            int idx = 0;
             for (Platform platform : platforms) {
-
+                selections[idx++] = gamePlatformIds.contains(platform.getId());
             }
             game.setPlatformSelections(selections);
         }
@@ -56,9 +57,9 @@ public class GameCollection {
         mHelper.saveGame(game);
     }
 
-    public Game getGame(UUID gameId) {
+    public Game getGame(UUID gameUuid) {
         for (Game game: mGames) {
-            if (game.getUuid() == gameId)
+            if (game.getUuid() == gameUuid)
                 return game;
         }
         return null;
