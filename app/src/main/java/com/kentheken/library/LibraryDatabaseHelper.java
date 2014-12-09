@@ -74,19 +74,21 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public void createDatabase() {
         Log.i(TAG, "createDatabase");
         boolean dbExists = checkDatabase();
-        //boolean dbExists = false; // force update while debugging
 
         if (!dbExists) {
-            // By calling this method, an empty database will be created into the default system path
-            // of your application so we are able to overwrite that database with ours.
-            getReadableDatabase();
+            createNewDatabase();
+        }
+    }
 
-            try {
-                copyDatabase();
-            } catch (IOException e) {
-                Log.e(TAG, "Couldn't copy database", e);
-                throw new Error("Error copying database");
-            }
+    private void createNewDatabase() {
+        // By calling this method, an empty database will be created into the default system path
+        // of your application so we are able to overwrite that database with ours.
+        getReadableDatabase();
+        try {
+            copyDatabase();
+        } catch (IOException e) {
+            Log.e(TAG, "Couldn't copy database", e);
+            throw new Error("Error copying database");
         }
     }
 
@@ -156,7 +158,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public synchronized void close() {
-        Log.i(TAG, "close");
+            Log.i(TAG, "close");
         if (mDatabase != null)
             mDatabase.close();
 
@@ -171,6 +173,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.i(TAG, "onUpgrade");
+        createNewDatabase();
     }
 
 
