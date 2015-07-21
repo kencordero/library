@@ -6,7 +6,7 @@ import java.util.UUID;
  * Created by kcordero on 6/17/2014.
  */
 public class Game {
-    public enum FLAG { NEW, MODIFIED, UNMODIFIED };
+    public enum FLAG { NEW, MODIFIED, UNMODIFIED }
 
     private final UUID mUuid;
     private int mId;

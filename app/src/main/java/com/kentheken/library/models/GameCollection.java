@@ -26,7 +26,7 @@ public class GameCollection {
 
     private GameCollection(Context appContext) {
         mAppContext = appContext;
-        mGames = new ArrayList<Game>();
+        mGames = new ArrayList<>();
         mHelper = LibraryDatabaseHelper.get(mAppContext, DB_NAME);
         mGames = mHelper.loadGames();
     }
