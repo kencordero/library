@@ -24,7 +24,7 @@ import java.util.UUID;
 import static com.kentheken.library.models.Game.FLAG.*;
 
 public class LibraryDatabaseHelper extends SQLiteOpenHelper {
-    private static final String TAG = "LibraryDatabaseHelper";
+    private static final String TAG = LibraryDatabaseHelper.class.getSimpleName();
     private static final int DB_VERSION = 1;
 
     private static final String COL_ID = "_id";

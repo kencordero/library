@@ -1,7 +1,6 @@
 package com.kentheken.library;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -24,14 +23,13 @@ import com.kentheken.library.models.GameCollection;
 import com.kentheken.library.models.Platform;
 import com.kentheken.library.models.PlatformCollection;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 /**
  * Created by kcordero on 6/17/2014.
  */
 public class GameFragment extends Fragment {
-    private static final String TAG = "GameFragment";
+    private static final String TAG = GameFragment.class.getSimpleName();
     public static final String EXTRA_GAME_ID = "com.kentheken.library.game_id";
     private static final String DIALOG_PLATFORM = "platform";
     private static final int REQUEST_PLATFORM_LIST = 0;
@@ -111,7 +109,7 @@ public class GameFragment extends Fragment {
             public void onClick(View view) {
                 FragmentManager fm = getActivity()
                         .getSupportFragmentManager();
-                PlatformSelectDialogFragment dialog = PlatformSelectDialogFragment.newInstance(
+                PlatformSelectFragment dialog = PlatformSelectFragment.newInstance(
                         PlatformCollection.get(getActivity()).getPlatformList(),
                         GameCollection.get(getActivity()).getPlatformSelections(mGame));
                 dialog.setTargetFragment(GameFragment.this, REQUEST_PLATFORM_LIST);
@@ -149,7 +147,7 @@ public class GameFragment extends Fragment {
         Log.i(TAG, "onActivityResult");
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == REQUEST_PLATFORM_LIST) {
-            boolean[] selections = data.getBooleanArrayExtra(PlatformSelectDialogFragment.EXTRA_SELECTION);
+            boolean[] selections = data.getBooleanArrayExtra(PlatformSelectFragment.EXTRA_SELECTION);
             mGame.setPlatformSelections(selections);
             if (mGame.getFlag() == Game.FLAG.UNMODIFIED) mGame.setFlag(Game.FLAG.MODIFIED);
             updatePlatformList();

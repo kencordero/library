@@ -9,7 +9,7 @@ import android.util.Log;
 import com.kentheken.library.models.Game;
 
 public class GameListActivity extends SingleFragmentActivity implements GameListFragment.Callbacks, GameFragment.Callbacks {
-    private static final String TAG = "GameListActivity";
+    private static final String TAG = GameListActivity.class.getSimpleName();
 
     @Override
     protected Fragment createFragment() {

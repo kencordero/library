@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * Created by kcordero on 6/18/2014.
  */
 public class GameListFragment extends ListFragment {
-    private static final String TAG = "GameListFragment";
+    private static final String TAG = GameListFragment.class.getSimpleName();
     private static final String DB_NAME = "library.db3";
     private ArrayList<Game> mGames;
     private Callbacks mCallbacks;

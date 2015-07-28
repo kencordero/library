@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 
 public abstract class SingleFragmentActivity extends FragmentActivity {
-    private static final String TAG = "SingleFragmentActivity";
+    private static final String TAG = SingleFragmentActivity.class.getSimpleName();
     protected abstract Fragment createFragment();
 
     protected int getLayoutResId() {

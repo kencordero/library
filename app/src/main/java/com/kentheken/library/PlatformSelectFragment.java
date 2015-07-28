@@ -10,10 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 
-import java.util.ArrayList;
-
-public class PlatformSelectDialogFragment extends DialogFragment {
-    private static final String TAG = "PlatformSelectDialogFragment";
+public class PlatformSelectFragment extends DialogFragment {
+    private static final String TAG = PlatformSelectFragment.class.getSimpleName();
     private static final String EXTRA_LIST = "platforms";
     public static final String EXTRA_SELECTION = "selection";
     private static boolean[] mSelections;
@@ -57,11 +55,11 @@ public class PlatformSelectDialogFragment extends DialogFragment {
         return builder.create();
     }
 
-    public static PlatformSelectDialogFragment newInstance(String[] platforms, boolean[] isSelected ) {
+    public static PlatformSelectFragment newInstance(String[] platforms, boolean[] isSelected ) {
         Bundle bundle = new Bundle();
         bundle.putStringArray(EXTRA_LIST, platforms);
         bundle.putBooleanArray(EXTRA_SELECTION, isSelected);
-        PlatformSelectDialogFragment fragment = new PlatformSelectDialogFragment();
+        PlatformSelectFragment fragment = new PlatformSelectFragment();
         fragment.setArguments(bundle);
         return fragment;
     }

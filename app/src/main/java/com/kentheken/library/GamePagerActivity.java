@@ -20,7 +20,7 @@ import java.util.UUID;
  * Created by kcordero on 6/25/2014.
  */
 public class GamePagerActivity extends FragmentActivity implements GameFragment.Callbacks {
-    private static final String TAG = "GamePagerActivity";
+    private static final String TAG = GamePagerActivity.class.getSimpleName();
     private ViewPager mViewPager;
     private ArrayList<Game> mGames;
 
