@@ -37,8 +37,6 @@ public class Game {
         return mUuid;
     }
 
-    public int getId() { return mId; }
-
     public void setId(int id) {
         mId = id;
     }

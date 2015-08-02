@@ -241,8 +241,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Integer> getGamePlatformIDs(Game game) {
         Log.i(TAG, "getGamePlatformIDs");
         ArrayList<Integer> platformIDs = new ArrayList<Integer>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_GAME_PLATFORM + " WHERE " + COL_GAME_ID + " = ?",
-                new String[] {Integer.toString(game.getId())});
+        Cursor cursor = mDatabase.query(TABLE_GAME_PLATFORM, null, COL_GAME_ID + " = ?", new String[] {game.getUuid().toString()}, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -263,7 +262,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
             if (GameCollection.get(mContext).getPlatformSelections(game)[idx++]) {
                 ContentValues values = new ContentValues();
                 Log.i(TAG, game.getTitle() + ":" + platform.getName());
-                values.put(COL_GAME_ID, game.getId());
+                values.put(COL_GAME_ID, game.getUuid().toString());
                 values.put(COL_PLATFORM_ID, platform.getId());
                 getWritableDatabase().insert(TABLE_GAME_PLATFORM, null, values);
             }
