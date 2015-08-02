@@ -35,8 +35,6 @@ public class GameFragment extends Fragment {
     private static final int REQUEST_PLATFORM_LIST = 0;
     private Callbacks mCallbacks;
 
-    private EditText mTitleField;
-    private Button mPlatformSelectButton;
     private TextView mPlatformListText;
     private Game mGame;
 
@@ -82,9 +80,9 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         Log.i(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_game, parent, false);
-        mTitleField = (EditText) view.findViewById(R.id.fragment_game_titleField);
-        mTitleField.setText(mGame.getTitle());
-        mTitleField.addTextChangedListener(new TextWatcher() {
+        EditText titleField = (EditText) view.findViewById(R.id.fragment_game_titleField);
+        titleField.setText(mGame.getTitle());
+        titleField.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
@@ -103,8 +101,8 @@ public class GameFragment extends Fragment {
             }
         });
 
-        mPlatformSelectButton = (Button) view.findViewById(R.id.fragment_game_platform_select);
-        mPlatformSelectButton.setOnClickListener(new View.OnClickListener() {
+        Button platformSelectButton = (Button) view.findViewById(R.id.fragment_game_platform_select);
+        platformSelectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity()
