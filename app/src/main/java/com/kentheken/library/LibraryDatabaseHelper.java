@@ -181,7 +181,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Game> loadGames() {
         Log.i(TAG, "loadGames");
         ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_GAME + " ORDER BY " + COL_TITLE + " COLLATE NOCASE", null);
+        Cursor cursor = mDatabase.query(TABLE_GAME, null, null, null, null, null, COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -222,7 +222,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Platform> loadPlatforms() {
         Log.i(TAG, "loadPlatforms");
         ArrayList<Platform> collection = new ArrayList<Platform>();
-        Cursor cursor = mDatabase.rawQuery("SELECT * FROM " + TABLE_PLATFORM + " ORDER BY " + COL_NAME + " COLLATE NOCASE", null);
+        Cursor cursor = mDatabase.query(TABLE_PLATFORM, null, null, null, null, null, COL_NAME + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
