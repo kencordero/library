@@ -89,6 +89,9 @@ public class GameListFragment extends ListFragment {
                 updateUI();
                 mCallbacks.onGameSelected(game);
                 return true;
+            case R.id.menu_item_filter_by_platform:
+                //TODO dialog to choose filter
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

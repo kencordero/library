@@ -23,5 +23,6 @@
     <string name="book_format_label">Format</string>
     <string name="book_first_name_hint">First name</string>
     <string name="book_last_name_hint">Last name</string>
+    <string name="menu_item_filter_games">Filter by platform</string>
 
 </resources>
