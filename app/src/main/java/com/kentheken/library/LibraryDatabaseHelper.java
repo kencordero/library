@@ -178,10 +178,31 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
 
     // public helper methods to access and get content from the database.
-    public ArrayList<Game> loadGames() {
-        Log.i(TAG, "loadGames");
+    public ArrayList<Game> getAllGames() {
+        Log.i(TAG, "getAllGames");
         ArrayList<Game> collection = new ArrayList<Game>();
         Cursor cursor = mDatabase.query(TABLE_GAME, null, null, null, null, null, COL_TITLE + " COLLATE NOCASE");
+        if (cursor != null && cursor.getCount() > 0) {
+            try {
+                cursor.moveToFirst();
+                do {
+                    UUID gameUuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(COL_UUID)));
+                    String gameTitle = cursor.getString(cursor.getColumnIndex(COL_TITLE));
+                    int gameId = cursor.getInt(cursor.getColumnIndex(COL_ID));
+                    collection.add(new Game(gameUuid, gameTitle, UNMODIFIED, gameId));
+                } while (cursor.moveToNext());
+            } finally {
+                cursor.close();
+            }
+        }
+        return collection;
+    }
+
+    public ArrayList<Game> getGamesByPlatform(long platformId) {
+        Log.i(TAG, "getGamesByPlatform");
+        ArrayList<Game> collection = new ArrayList<Game>();
+        Cursor cursor = mDatabase.query(TABLE_GAME, null, COL_PLATFORM_ID + " = ?",
+                new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();

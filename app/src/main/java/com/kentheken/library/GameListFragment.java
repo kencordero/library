@@ -2,6 +2,7 @@ package com.kentheken.library;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.kentheken.library.models.Game;
 import com.kentheken.library.models.GameCollection;
+import com.kentheken.library.models.PlatformCollection;
 
 import java.util.ArrayList;
 
@@ -24,7 +26,8 @@ import java.util.ArrayList;
  */
 public class GameListFragment extends ListFragment {
     private static final String TAG = GameListFragment.class.getSimpleName();
-    private static final String DB_NAME = "library.db3";
+    private static final int REQUEST_PLATFORM = 0;
+    private static final String DIALOG_PLATFORM = "platform";
     private ArrayList<Game> mGames;
     private Callbacks mCallbacks;
 
@@ -90,7 +93,10 @@ public class GameListFragment extends ListFragment {
                 mCallbacks.onGameSelected(game);
                 return true;
             case R.id.menu_item_filter_by_platform:
-                //TODO dialog to choose filter
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                PlatformFilterFragment dialog = PlatformFilterFragment.newInstance(PlatformCollection.get(getActivity()).getPlatformList());
+                dialog.setTargetFragment(GameListFragment.this, REQUEST_PLATFORM);
+                dialog.show(fm, DIALOG_PLATFORM);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

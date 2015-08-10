@@ -28,7 +28,7 @@ public class GameCollection {
         mAppContext = appContext;
         mGames = new ArrayList<>();
         mHelper = LibraryDatabaseHelper.get(mAppContext, DB_NAME);
-        mGames = mHelper.loadGames();
+        mGames = mHelper.getAllGames();
     }
 
     public boolean[] getPlatformSelections(Game game) {
