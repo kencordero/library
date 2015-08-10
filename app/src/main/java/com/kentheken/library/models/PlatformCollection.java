@@ -26,7 +26,7 @@ public class PlatformCollection {
 
     private PlatformCollection(Context appContext) {
         mAppContext = appContext;
-        mHelper = LibraryDatabaseHelper.get(mAppContext, DB_NAME);
+        mHelper = LibraryDatabaseHelper.get(mAppContext);
         mPlatforms = mHelper.loadPlatforms();
     }
 

@@ -14,7 +14,6 @@ public class GameCollection {
     private final Context mAppContext;
     private ArrayList<Game> mGames;
     private static GameCollection sCollection;
-    private static final String DB_NAME = "library.db3";
     private LibraryDatabaseHelper mHelper;
 
     public static GameCollection get(Context c) {
@@ -26,9 +25,17 @@ public class GameCollection {
 
     private GameCollection(Context appContext) {
         mAppContext = appContext;
+        getAllGames();
+    }
+
+    public void getAllGames() {
         mGames = new ArrayList<>();
-        mHelper = LibraryDatabaseHelper.get(mAppContext, DB_NAME);
+        mHelper = LibraryDatabaseHelper.get(mAppContext);
         mGames = mHelper.getAllGames();
+    }
+
+    public void getGamesFilteredByPlatform(long platformId) {
+        mGames = new ArrayList<>();
     }
 
     public boolean[] getPlatformSelections(Game game) {

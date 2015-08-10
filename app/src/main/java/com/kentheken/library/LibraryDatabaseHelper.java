@@ -26,6 +26,7 @@ import static com.kentheken.library.models.Game.FLAG.*;
 public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = LibraryDatabaseHelper.class.getSimpleName();
     private static final int DB_VERSION = 1;
+    private static final String DB_NAME = "library.db3";
 
     private static final String COL_ID = "_id";
     private static final String COL_UUID = "uuid";
@@ -40,7 +41,6 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static LibraryDatabaseHelper sHelper;
     private static SQLiteDatabase mDatabase;
     private final Context mContext;
-    private final String mDbName;
     private String mPath;
 
     public SQLiteDatabase getDb() {
@@ -51,19 +51,17 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
      * Constructor
      * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
      * @param context activity or application context
-     * @param dbName filename for database
      */
-    private LibraryDatabaseHelper(Context context, String dbName) {
-        super(context, dbName, null, DB_VERSION);
+    private LibraryDatabaseHelper(Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
         Log.i(TAG, "init");
-        mDbName = dbName;
         mContext = context;
         openDatabase();
     }
 
-    public static LibraryDatabaseHelper get(Context context, String dbName) {
+    public static LibraryDatabaseHelper get(Context context) {
         if (sHelper == null) {
-            sHelper = new LibraryDatabaseHelper(context, dbName);
+            sHelper = new LibraryDatabaseHelper(context);
         }
         return sHelper;
     }
@@ -120,7 +118,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private void copyDatabase() throws IOException {
         Log.i(TAG, "copyDatabase");
         //Open your local db as the input stream
-        InputStream myInput = mContext.getAssets().open(mDbName);
+        InputStream myInput = mContext.getAssets().open(DB_NAME);
 
         //Open the empty db as the output stream
         OutputStream myOutput = new FileOutputStream(getPath());
@@ -140,7 +138,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     private String getPath() {
         if (mPath == null) {
-            mPath = mContext.getDatabasePath(mDbName).getPath();
+            mPath = mContext.getDatabasePath(DB_NAME).getPath();
             Log.i(TAG, "Path: " + mPath);
         }
         return mPath;
@@ -201,8 +199,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Game> getGamesByPlatform(long platformId) {
         Log.i(TAG, "getGamesByPlatform");
         ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.query(TABLE_GAME, null, COL_PLATFORM_ID + " = ?",
-                new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
+        Cursor cursor = mDatabase.query(TABLE_GAME, null, COL_PLATFORM_ID + " = ?", new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
