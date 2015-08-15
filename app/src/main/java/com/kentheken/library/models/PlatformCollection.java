@@ -15,7 +15,6 @@ public class PlatformCollection {
     private String[] mPlatformList;
     private static PlatformCollection sCollection;
     private static final String DB_NAME = "library.db3";
-    private LibraryDatabaseHelper mHelper;
 
     public static PlatformCollection get(Context c) {
         if (sCollection == null) {
@@ -26,8 +25,7 @@ public class PlatformCollection {
 
     private PlatformCollection(Context appContext) {
         mAppContext = appContext;
-        mHelper = LibraryDatabaseHelper.get(mAppContext);
-        mPlatforms = mHelper.loadPlatforms();
+        mPlatforms = LibraryDatabaseHelper.get(mAppContext).loadPlatforms();
     }
 
     public int getCount() {
@@ -41,6 +39,14 @@ public class PlatformCollection {
     public Platform getPlatform(int platformId) {
         for (Platform platform: mPlatforms) {
             if (platform.getId() == platformId)
+                return platform;
+        }
+        return null;
+    }
+
+    public Platform getPlatformId(String platformName) {
+        for (Platform platform: mPlatforms) {
+            if (platform.getName().equals(platformName))
                 return platform;
         }
         return null;

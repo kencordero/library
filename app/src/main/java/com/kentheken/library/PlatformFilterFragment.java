@@ -1,5 +1,6 @@
 package com.kentheken.library;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,7 +13,7 @@ import android.util.Log;
 public class PlatformFilterFragment extends DialogFragment {
     private static final String TAG = PlatformFilterFragment.class.getSimpleName();
     public static final String EXTRA_LIST = "com.kentheken.library.platforms";
-    public static final String EXTRA_PLATFORM = "com.kentheken.library.platform";
+    public static final String EXTRA_SELECTION = "com.kentheken.library.platform";
     private String mPlatform;
 
     @NonNull
@@ -27,13 +28,13 @@ public class PlatformFilterFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mPlatform = platforms[which];
+                        getArguments().putString(EXTRA_SELECTION, platforms[which]);
+                        sendResult(Activity.RESULT_OK);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
+                    public void onClick(DialogInterface dialog, int which) { }
                 });
 
         return builder.create();
@@ -52,7 +53,7 @@ public class PlatformFilterFragment extends DialogFragment {
             return;
 
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_PLATFORM, mPlatform);
+        intent.putExtra(EXTRA_SELECTION, mPlatform);
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }

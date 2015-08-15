@@ -199,7 +199,8 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     public ArrayList<Game> getGamesByPlatform(long platformId) {
         Log.i(TAG, "getGamesByPlatform");
         ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.query(TABLE_GAME, null, COL_PLATFORM_ID + " = ?", new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
+        Cursor cursor = mDatabase.query(TABLE_GAME_PLATFORM, null, COL_PLATFORM_ID + " = ?",
+                new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();

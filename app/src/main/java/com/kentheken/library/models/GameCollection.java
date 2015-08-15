@@ -34,8 +34,10 @@ public class GameCollection {
         mGames = mHelper.getAllGames();
     }
 
-    public void getGamesFilteredByPlatform(long platformId) {
+    public ArrayList<Game> getGamesFilteredByPlatform(long platformId) {
         mGames = new ArrayList<>();
+        //TODO
+        return mGames;
     }
 
     public boolean[] getPlatformSelections(Game game) {

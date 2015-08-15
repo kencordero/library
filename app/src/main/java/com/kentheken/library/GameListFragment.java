@@ -1,6 +1,7 @@
 package com.kentheken.library;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
@@ -128,4 +129,17 @@ public class GameListFragment extends ListFragment {
             return convertView;
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i(TAG, "onActivityResult");
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == REQUEST_PLATFORM) {
+            String platformName = data.getStringExtra(PlatformFilterFragment.EXTRA_SELECTION);
+            Log.i(TAG, "Platform: " + platformName);
+            long platformId = PlatformCollection.get(getActivity()).getPlatformId(platformName);
+            mGames = GameCollection.get(getActivity()).getGamesFilteredByPlatform(platformId);
+        }
+    }
+
 }
