@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.kentheken.library.R;
 import com.kentheken.library.models.Game;
 import com.kentheken.library.models.GameCollection;
 import com.kentheken.library.models.Platform;

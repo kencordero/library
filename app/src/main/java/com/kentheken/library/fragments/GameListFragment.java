@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.kentheken.library.R;
 import com.kentheken.library.models.Game;
 import com.kentheken.library.models.GameCollection;
 import com.kentheken.library.models.PlatformCollection;

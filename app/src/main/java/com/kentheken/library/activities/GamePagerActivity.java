@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.kentheken.library.fragments.GameFragment;
+import com.kentheken.library.R;
 import com.kentheken.library.models.Game;
 import com.kentheken.library.models.GameCollection;
 

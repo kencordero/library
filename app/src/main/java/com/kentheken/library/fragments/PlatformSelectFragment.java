@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
+
+import com.kentheken.library.R;
 
 public class PlatformSelectFragment extends DialogFragment {
     private static final String TAG = PlatformSelectFragment.class.getSimpleName();

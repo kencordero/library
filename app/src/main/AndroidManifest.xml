@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".GameListActivity"
+            android:name=".activities.GameListActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -16,11 +16,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".GamePagerActivity"
-            android:parentActivityName=".GameListActivity" >
+            android:name=".activities.GamePagerActivity"
+            android:parentActivityName=".activities.GameListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".GameListActivity" />
+                android:value=".activities.GameListActivity" />
         </activity>
     </application>
 

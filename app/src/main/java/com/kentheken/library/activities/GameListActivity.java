@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.activities;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
+import com.kentheken.library.fragments.GameFragment;
+import com.kentheken.library.fragments.GameListFragment;
+import com.kentheken.library.R;
 import com.kentheken.library.models.Game;
 
 public class GameListActivity extends SingleFragmentActivity implements GameListFragment.Callbacks, GameFragment.Callbacks {
