@@ -44,12 +44,12 @@ public class PlatformCollection {
         return null;
     }
 
-    public Platform getPlatformId(String platformName) {
+    public long getPlatformId(String platformName) {
         for (Platform platform: mPlatforms) {
             if (platform.getName().equals(platformName))
-                return platform;
+                return platform.getId();
         }
-        return null;
+        return -1;
     }
 
     public Platform get(int idx) {
