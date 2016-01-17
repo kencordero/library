@@ -90,8 +90,8 @@ public class GameFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() > 0) {
                     mGame.setTitle(s.toString());
-                    if (mGame.getFlag() == Game.FLAG.UNMODIFIED) {
-                        mGame.setFlag(Game.FLAG.MODIFIED);
+                    if (mGame.getFlag() == Game.Flag.UNMODIFIED) {
+                        mGame.setFlag(Game.Flag.MODIFIED);
                     }
                     mCallbacks.onGameUpdated(mGame);
                     getActivity().setTitle(mGame.getTitle());
@@ -133,7 +133,7 @@ public class GameFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.i(TAG, "onPause");
-        if (mGame.getFlag() != Game.FLAG.UNMODIFIED) {
+        if (mGame.getFlag() != Game.Flag.UNMODIFIED) {
             Log.i(TAG, "save changes");
             GameCollection.get(getActivity()).saveGame(mGame);
         } else {
@@ -148,7 +148,7 @@ public class GameFragment extends Fragment {
         if (requestCode == REQUEST_PLATFORM_LIST) {
             boolean[] selections = data.getBooleanArrayExtra(PlatformSelectFragment.EXTRA_SELECTION);
             mGame.setPlatformSelections(selections);
-            if (mGame.getFlag() == Game.FLAG.UNMODIFIED) mGame.setFlag(Game.FLAG.MODIFIED);
+            if (mGame.getFlag() == Game.Flag.UNMODIFIED) mGame.setFlag(Game.Flag.MODIFIED);
             updatePlatformList();
         }
     }

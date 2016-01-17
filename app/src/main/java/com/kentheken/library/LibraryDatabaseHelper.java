@@ -21,7 +21,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static com.kentheken.library.models.Game.FLAG.*;
+import static com.kentheken.library.models.Game.Flag.*;
 
 public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private static final String TAG = LibraryDatabaseHelper.class.getSimpleName();
@@ -43,13 +43,10 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     private final Context mContext;
     private String mPath;
 
-    public SQLiteDatabase getDb() {
-        return mDatabase;
-    }
-
     /**
      * Constructor
-     * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
+     * Takes and keeps a reference of the passed context in order to access to the application
+     * assets and resources.
      * @param context activity or application context
      */
     private LibraryDatabaseHelper(Context context) {
@@ -91,7 +88,8 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * Check if the database already exist to avoid re-copying the file each time you open the application.
+     * Check if the database already exist to avoid re-copying the file each time you open the
+     * application.
      * @return true if it exists, false if it doesn't
      */
     private boolean checkDatabase() {
@@ -178,8 +176,9 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
     // public helper methods to access and get content from the database.
     public ArrayList<Game> getAllGames() {
         Log.i(TAG, "getAllGames");
-        ArrayList<Game> collection = new ArrayList<Game>();
-        Cursor cursor = mDatabase.query(TABLE_GAME, null, null, null, null, null, COL_TITLE + " COLLATE NOCASE");
+        ArrayList<Game> collection = new ArrayList<>();
+        Cursor cursor = mDatabase.query(TABLE_GAME, null, null, null, null, null,
+                COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -198,7 +197,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Game> getGamesByPlatform(long platformId) {
         Log.i(TAG, "getGamesByPlatform");
-        ArrayList<Game> collection = new ArrayList<Game>();
+        ArrayList<Game> collection = new ArrayList<>();
         Cursor cursor = mDatabase.query(TABLE_GAME_PLATFORM, null, COL_PLATFORM_ID + " = ?",
                 new String[] {String.valueOf(platformId)}, null, null, COL_TITLE + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
@@ -219,7 +218,8 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public void saveGame(Game game) {
         Log.i(TAG, "saveGame");
-        if (game.getTitle().length() == 0) return; // won't save blank game or overwrite game with no title
+        // won't save blank game or overwrite game with no title
+        if (game.getTitle().length() == 0) return;
         ContentValues values = new ContentValues();
 
         values.put(COL_TITLE, game.getTitle());
@@ -231,7 +231,8 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
                 break;
             case MODIFIED:
                 Log.i(TAG, "saveGame: update " + game.getTitle());
-                getWritableDatabase().update(TABLE_GAME, values, COL_UUID + " = ?", new String[]{game.getUuid().toString()});
+                getWritableDatabase().update(TABLE_GAME, values, COL_UUID + " = ?",
+                        new String[]{game.getUuid().toString()});
                 break;
         }
         game.setFlag(UNMODIFIED);
@@ -240,8 +241,9 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Platform> loadPlatforms() {
         Log.i(TAG, "loadPlatforms");
-        ArrayList<Platform> collection = new ArrayList<Platform>();
-        Cursor cursor = mDatabase.query(TABLE_PLATFORM, null, null, null, null, null, COL_NAME + " COLLATE NOCASE");
+        ArrayList<Platform> collection = new ArrayList<>();
+        Cursor cursor = mDatabase.query(TABLE_PLATFORM, null, null, null, null, null,
+                COL_NAME + " COLLATE NOCASE");
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -259,8 +261,9 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Integer> getGamePlatformIDs(Game game) {
         Log.i(TAG, "getGamePlatformIDs");
-        ArrayList<Integer> platformIDs = new ArrayList<Integer>();
-        Cursor cursor = mDatabase.query(TABLE_GAME_PLATFORM, null, COL_GAME_ID + " = ?", new String[] {game.getUuid().toString()}, null, null, null);
+        ArrayList<Integer> platformIDs = new ArrayList<>();
+        Cursor cursor = mDatabase.query(TABLE_GAME_PLATFORM, null, COL_GAME_ID + " = ?",
+                new String[] {game.getUuid().toString()}, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             try {
                 cursor.moveToFirst();
@@ -287,6 +290,7 @@ public class LibraryDatabaseHelper extends SQLiteOpenHelper {
             }
         }
         //TODO: remove ones that weren't in latest updates
-        //getWritableDatabase().delete(TABLE_GAME_PLATFORM, COL_GAME_ID + " = ? AND " + COL_PLATFORM_ID + " NOT IN (?)", new String[] {});
+        //getWritableDatabase().delete(TABLE_GAME_PLATFORM,
+        // COL_GAME_ID + " = ? AND " + COL_PLATFORM_ID + " NOT IN (?)", new String[] {});
     }
 }

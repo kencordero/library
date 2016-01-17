@@ -6,19 +6,23 @@ import java.util.UUID;
  * Created by kcordero on 6/17/2014.
  */
 public class Game {
-    public enum FLAG { NEW, MODIFIED, UNMODIFIED }
+    public static class Flag {
+        public static final int NEW = 0;
+        public static final int MODIFIED = 1;
+        public static final int UNMODIFIED = 2;
+    }
 
     private final UUID mUuid;
     private int mId;
     private String mTitle;
-    private FLAG mFlag;
+    private int mFlag;
     private boolean[] mPlatformSelections;
 
     public Game() {
-        this(UUID.randomUUID(), "", FLAG.NEW, 0);
+        this(UUID.randomUUID(), "", Flag.NEW, 0);
     }
 
-    public Game(UUID uuid, String title, FLAG flag, int id) {
+    public Game(UUID uuid, String title, int flag, int id) {
         mTitle = title;
         mUuid = uuid;
         mFlag = flag;
@@ -41,11 +45,11 @@ public class Game {
         mId = id;
     }
 
-    public FLAG getFlag() {
+    public int getFlag() {
         return mFlag;
     }
 
-    public void setFlag(FLAG flag) {
+    public void setFlag(int flag) {
         mFlag = flag;
     }
 
