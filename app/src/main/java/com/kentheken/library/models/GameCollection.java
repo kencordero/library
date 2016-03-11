@@ -2,14 +2,11 @@ package com.kentheken.library.models;
 
 import android.content.Context;
 
-import com.kentheken.library.LibraryDatabaseHelper;
+import com.kentheken.library.utils.LibraryDatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-/**
- * Created by kcordero on 6/18/2014.
- */
 public class GameCollection {
     private final Context mAppContext;
     private ArrayList<Game> mGames;

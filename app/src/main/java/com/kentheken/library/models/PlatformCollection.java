@@ -2,7 +2,7 @@ package com.kentheken.library.models;
 
 import android.content.Context;
 
-import com.kentheken.library.LibraryDatabaseHelper;
+import com.kentheken.library.utils.LibraryDatabaseHelper;
 
 import java.util.ArrayList;
 

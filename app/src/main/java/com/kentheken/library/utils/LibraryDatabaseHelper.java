@@ -1,4 +1,4 @@
-package com.kentheken.library;
+package com.kentheken.library.utils;
 
 import android.content.ContentValues;
 import android.content.Context;
